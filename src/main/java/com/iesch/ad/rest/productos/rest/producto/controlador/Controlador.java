@@ -2,6 +2,7 @@ package com.iesch.ad.rest.productos.rest.producto.controlador;
 
 import com.iesch.ad.rest.productos.rest.producto.modelos.Producto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.iesch.ad.rest.productos.rest.producto.repositorio.ProductoRepositorio;
@@ -32,8 +33,10 @@ public class Controlador {
     }
 
     @PostMapping("api/producto")
-    public Producto nuevoProducto(@RequestBody Producto nuevo){
-         return productoRepositorio.save(nuevo);
+    public ResponseEntity<?> nuevoProducto(@RequestBody Producto nuevo){
+        //return 201(status(HttpStatus.Created)) y producto insertado
+         Producto productoSalvado = productoRepositorio.save(nuevo);
+         return ResponseEntity.status(HttpStatus.CREATED).body(productoSalvado);
     }
 
     @PutMapping("api/producto/{id}")
