@@ -40,20 +40,27 @@ public class Controlador {
     }
 
     @PutMapping("api/producto/{id}")
-    public Producto editarProducto(@RequestBody Producto editar, @PathVariable Long id){
-         if(productoRepositorio.existsById(id)){
-             editar.setId(id);
-             return productoRepositorio.save(editar);
-         }else return null;
+    public ResponseEntity<?> editarProducto(@RequestBody Producto editar, @PathVariable Long id){
+//         return productoRepositorio.findById(id).map(producto -> {
+//            producto.setNombre(editar.getNombre());
+//            producto.setPrecio(editar.getPrecio());
+//            return ResponseEntity.ok(productoRepositorio.save(producto));
+//         }).orElseGet(()->{
+//             return ResponseEntity.notFound().build();
+//         });
+
+        if (productoRepositorio.existsById(id)){
+            editar.setId(id);
+            Producto actualizado = productoRepositorio.save(editar);
+            return ResponseEntity.ok(actualizado);
+        }else return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("api/producto/{id}")
-    public Producto borraProducto (@PathVariable Long id){
-        if (productoRepositorio.existsById(id)){
-            Producto result = productoRepositorio.findById(id).get();
+    public ResponseEntity<?> borraProducto (@PathVariable Long id){
             productoRepositorio.deleteById(id);
-            return result;
-        }else return null;
+            return ResponseEntity.noContent().build();
+
     }
 
 
