@@ -1,8 +1,11 @@
 package com.iesch.ad.rest.productos.rest.producto.controlador;
 
 import com.iesch.ad.rest.productos.rest.producto.converter.ProductoDTOConverter;
+import com.iesch.ad.rest.productos.rest.producto.dto.CreateProductoDTO;
 import com.iesch.ad.rest.productos.rest.producto.dto.ProductoDTO;
+import com.iesch.ad.rest.productos.rest.producto.modelos.Categoria;
 import com.iesch.ad.rest.productos.rest.producto.modelos.Producto;
+import com.iesch.ad.rest.productos.rest.producto.repositorio.CategoriaRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +22,9 @@ public class Controlador {
 
     @Autowired
     ProductoDTOConverter productoDTOConverter;
+
+    @Autowired
+    CategoriaRepositorio categoriaRepositorio;
 
     //Error 404 si no hay productos y un 200 si hay uno o más
     //ResponseEntity devolverá un dato numérico, al ser un ? puede ser null
@@ -81,6 +87,19 @@ public class Controlador {
              return ResponseEntity.ok(listaDTO);
          }
     }
+
+    @PostMapping("api/productoDTO")
+    public ResponseEntity<?> nuevoATravesDeDto(@RequestBody CreateProductoDTO nuevo){
+        //return 201(status(HttpStatus.Created)) y producto insertado
+        Producto productoNuevo = new Producto();
+        productoNuevo.setNombre(nuevo.getNombre());
+        productoNuevo.setPrecio(nuevo.getPrecio());
+        Categoria categoria = categoriaRepositorio.findById(nuevo.getCategoriaId()).orElse(null);
+        productoNuevo.setCategoria(categoria);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(productoRepositorio.save(productoNuevo));
+    }
+
 
 
 }
