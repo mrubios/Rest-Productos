@@ -1,5 +1,6 @@
 package com.iesch.ad.rest.productos.rest.producto.converter;
 
+import com.iesch.ad.rest.productos.rest.producto.dto.CreateProductoDTO;
 import com.iesch.ad.rest.productos.rest.producto.dto.ProductoDTO;
 import com.iesch.ad.rest.productos.rest.producto.modelos.Producto;
 import lombok.RequiredArgsConstructor;
@@ -14,5 +15,8 @@ public class ProductoDTOConverter {
     public ProductoDTO convertToDTO(Producto producto){
         return modelMapper.map(producto, ProductoDTO.class);
         //Los nombres han de ser exactamente los mismos para que esta linea funcione
+    }
+    public  Producto convertDesdeDTO(CreateProductoDTO createProductoDTO){
+        return modelMapper.map(createProductoDTO, Producto.class);
     }
 }

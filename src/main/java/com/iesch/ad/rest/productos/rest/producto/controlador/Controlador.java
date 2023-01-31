@@ -91,13 +91,18 @@ public class Controlador {
     @PostMapping("api/productoDTO")
     public ResponseEntity<?> nuevoATravesDeDto(@RequestBody CreateProductoDTO nuevo){
         //return 201(status(HttpStatus.Created)) y producto insertado
-        Producto productoNuevo = new Producto();
-        productoNuevo.setNombre(nuevo.getNombre());
-        productoNuevo.setPrecio(nuevo.getPrecio());
-        Categoria categoria = categoriaRepositorio.findById(nuevo.getCategoriaId()).orElse(null);
-        productoNuevo.setCategoria(categoria);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(productoRepositorio.save(productoNuevo));
+//        Producto productoNuevo = new Producto();
+//        productoNuevo.setNombre(nuevo.getNombre());
+//        productoNuevo.setPrecio(nuevo.getPrecio());
+//        Categoria categoria = categoriaRepositorio.findById(nuevo.getCategoriaId()).orElse(null);
+//        productoNuevo.setCategoria(categoria);
+
+//        return ResponseEntity.status(HttpStatus.CREATED).body(productoRepositorio.save(productoNuevo));
+
+        Producto producto = productoDTOConverter.convertDesdeDTO(nuevo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productoRepositorio.save(producto));
+
     }
 
 
