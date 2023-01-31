@@ -1,5 +1,7 @@
 package com.iesch.ad.rest.productos.rest.producto.controlador;
 
+import com.iesch.ad.rest.productos.rest.producto.converter.ProductoDTOConverter;
+import com.iesch.ad.rest.productos.rest.producto.dto.ProductoDTO;
 import com.iesch.ad.rest.productos.rest.producto.modelos.Producto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,11 +10,15 @@ import org.springframework.web.bind.annotation.*;
 import com.iesch.ad.rest.productos.rest.producto.repositorio.ProductoRepositorio;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class Controlador {
     @Autowired
     ProductoRepositorio productoRepositorio;
+
+    @Autowired
+    ProductoDTOConverter productoDTOConverter;
 
     //Error 404 si no hay productos y un 200 si hay uno o más
     //ResponseEntity devolverá un dato numérico, al ser un ? puede ser null
@@ -61,6 +67,19 @@ public class Controlador {
             productoRepositorio.deleteById(id);
             return ResponseEntity.noContent().build();
 
+    }
+
+    @GetMapping("api/productoDTO")
+    public ResponseEntity<?> obtenerTodosATravesDeDTO(){
+         List<Producto> result = productoRepositorio.findAll();
+         if (result.isEmpty()){
+             return ResponseEntity.notFound().build();
+         }else{
+             List<ProductoDTO> listaDTO = result.stream().map(
+                     productoDTOConverter :: convertToDTO
+             ).collect(Collectors.toList());
+             return ResponseEntity.ok(listaDTO);
+         }
     }
 
 
