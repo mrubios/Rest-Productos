@@ -72,7 +72,7 @@ public class Controlador {
             return ResponseEntity.noContent().build();
 
     }
-
+    @CrossOrigin(origins = "http://localhost:2212")
     @GetMapping("api/productoDTO")
     public ResponseEntity<?> obtenerTodosATravesDeDTO(){
          List<Producto> result = productoRepositorio.findAll();
