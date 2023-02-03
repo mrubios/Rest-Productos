@@ -3,7 +3,7 @@ package com.iesch.ad.rest.productos.rest.producto.controlador;
 import com.iesch.ad.rest.productos.rest.producto.converter.ProductoDTOConverter;
 import com.iesch.ad.rest.productos.rest.producto.dto.CreateProductoDTO;
 import com.iesch.ad.rest.productos.rest.producto.dto.ProductoDTO;
-import com.iesch.ad.rest.productos.rest.producto.modelos.Categoria;
+import com.iesch.ad.rest.productos.rest.producto.error.ProductoNoEncontradoExcepcion;
 import com.iesch.ad.rest.productos.rest.producto.modelos.Producto;
 import com.iesch.ad.rest.productos.rest.producto.repositorio.CategoriaRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +38,8 @@ public class Controlador {
     }
 
     @GetMapping("api/producto/{id}")
-    public ResponseEntity<?> obtenerUno(@PathVariable Long id){
-         Producto result = productoRepositorio.findById(id).orElse(null);
-         if (result==null)return ResponseEntity.notFound().build();
-         else return ResponseEntity.ok(result);
+    public Producto obtenerUno(@PathVariable Long id){
+         return productoRepositorio.findById(id).orElseThrow(() -> new ProductoNoEncontradoExcepcion(id));
     }
 
     @PostMapping("api/producto")
